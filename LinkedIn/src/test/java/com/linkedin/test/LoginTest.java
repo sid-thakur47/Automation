@@ -1,5 +1,5 @@
 /**********************************************************
- * @Purpose: To automate LinkedIn logine page
+ * @Purpose: To automate LinkedIn login page
  * @Author: Siddhesh Thakur
  * @Date: 23/06/2020
  **********************************************************/
@@ -17,37 +17,41 @@ import org.testng.annotations.Test;
 public class LoginTest extends LinkedInBase {
     Login login;
 
+    //initialize login object
+
     @BeforeMethod
     public void run() {
         initialize();
         login = new Login();
     }
-
+    // to close browser
     @AfterMethod
     public void exitBrowser() {
         webDriver.quit();
     }
-
+    //verify login
     @Test
     public void loginTest() {
-        login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password"));
-        String currentUrl = webDriver.getCurrentUrl();
+        login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
+        String currentUrl = webDriver.getCurrentUrl(); //get current url
         Assert.assertEquals("https://www.linkedin.com/feed/", currentUrl);
     }
 
+    //test for wrong username
     @Test
     public void wrongUserName() {
-        login.linkedInLogin("sidthaku6433", "test@12345");
+        login.linkedInLogin("sidthaku6433", "test");
         WebElement errorMessageElement = webDriver.findElement(By.id("error-for-username"));
-        String actualMessage = errorMessageElement.getText();
+        String actualMessage = errorMessageElement.getText(); //get error message
         Assert.assertEquals(actualMessage, "Please enter a valid username");
     }
 
+    //test for wrong password
     @Test
     public void wrongPassword() {
-        login.linkedInLogin("sidthaku6433@gmail.com", "wrongpassword");
+        login.linkedInLogin("sid@gmail.com", "wrongpassword");
         WebElement errorMessageElement = webDriver.findElement(By.id("error-for-password"));
-        String actualMessage = errorMessageElement.getText();
+        String actualMessage = errorMessageElement.getText(); //get error message
         Assert.assertEquals(actualMessage, "Hmm, that's not the right password. Please try again or request a new one.");
     }
 }

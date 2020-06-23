@@ -16,9 +16,9 @@ import java.util.Properties;
 public class LinkedInBase {
 
     public static WebDriver webDriver;
-
     public static Properties properties;
 
+    //initialize and load user credentials
     public LinkedInBase() {
         properties = new Properties();
         try {
@@ -29,6 +29,7 @@ public class LinkedInBase {
         }
     }
 
+    //initialize chrome driver
     public static void initialize() {
         WebDriverManager.chromedriver().setup();
         webDriver = new ChromeDriver();
