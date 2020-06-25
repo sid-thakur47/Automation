@@ -41,14 +41,14 @@ public class LoginTest extends LinkedInBase {
     //verify login
     @Test
     public void loginTest() throws IOException, InterruptedException {
-        
+        takeScreenShot("login");
         ExtentTest test = extent.createTest("Login Test", "To check login feature");
         test.pass("Navigated to Login Page");
         login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
         test.pass("Navigated to HomePage Page");
         String currentUrl = webDriver.getCurrentUrl(); //get current url
         Assert.assertEquals(currentUrl,"https://www.linkedin.com/feed/");
-
+        takeScreenShot("afterLogin");
     }
 
     //test for wrong username
@@ -60,6 +60,7 @@ public class LoginTest extends LinkedInBase {
         test.pass("Invalid Username -On Login page ");
         String actualMessage = login.wrongPassword("username");
         Assert.assertEquals(actualMessage, "Please enter a valid username");
+        takeScreenShot("invalidUserName");
     }
 
     //test for short password
@@ -70,7 +71,7 @@ public class LoginTest extends LinkedInBase {
         test.pass("Invalid Password-On Login page ");
         String actualMessage = login.wrongPassword("password");
         Assert.assertEquals(actualMessage, "Welcome Back");
-
+        takeScreenShot("invalidPassword");
     }
 
     // to close browser
