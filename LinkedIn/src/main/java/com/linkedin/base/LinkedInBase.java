@@ -8,6 +8,7 @@ package com.linkedin.base;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class LinkedInBase {
 
     //initialize and load user credentials
     public LinkedInBase() {
+
         properties = new Properties();
         try {
             FileInputStream input = new FileInputStream("C:/Users/Shivani/Desktop/Backup/Input.csv");
@@ -32,7 +34,9 @@ public class LinkedInBase {
     //initialize chrome driver
     public static void initialize() {
         WebDriverManager.chromedriver().setup();
-        webDriver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-notifications");
+        webDriver = new ChromeDriver(options);
         webDriver.manage().window().maximize();
         webDriver.get(properties.getProperty("url"));
     }

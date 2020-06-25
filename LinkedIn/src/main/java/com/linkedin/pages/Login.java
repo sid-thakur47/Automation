@@ -10,12 +10,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.io.File;
+
 public class Login extends LinkedInBase {
 
-    //initialization of elements
-    public Login() {
-        PageFactory.initElements(webDriver, this);
-    }
+    File destFile = new File("Screenshot.png");
 
     //Web element locators
     @FindBy(id = "username")
@@ -27,11 +26,30 @@ public class Login extends LinkedInBase {
     @FindBy(className = "login__form_action_container")
     WebElement loginButton;
 
+    @FindBy(xpath = "//h1[contains(text(),'Welcome Back')]")
+    WebElement wrongPassword;
 
-    //to login in LinkedIn
-    public void linkedInLogin(String username, String password) {
+    @FindBy(id = "error-for-username")
+    WebElement wrongUserName;
+    ;
+
+    //initialization of elements
+    public Login() {
+        PageFactory.initElements(webDriver, this);
+    }
+
+    public void linkedInLogin(String username, String password) throws InterruptedException {
         this.username.sendKeys(username);
         this.password.sendKeys(password);
         this.loginButton.click();
+        Thread.sleep(1000);
+    }
+
+    public String wrongPassword(String errorOf) {
+        if(errorOf.equals("password")) {
+            return wrongPassword.getText();
+        } else {
+            return wrongUserName.getText();
+        }
     }
 }
