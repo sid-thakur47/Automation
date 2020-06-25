@@ -10,7 +10,6 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.linkedin.base.LinkedInBase;
-import com.linkedin.pages.Google;
 import com.linkedin.pages.Login;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -21,10 +20,10 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 public class LoginTest extends LinkedInBase {
+
     Login login;
     ExtentReports extent;
     ExtentHtmlReporter htmlReporter;
-    Google google;
 
     //initialize login object
 
@@ -32,7 +31,6 @@ public class LoginTest extends LinkedInBase {
     public void run() {
         initialize();
         login = new Login();
-        google = new Google();
     }
 
     @BeforeSuite
