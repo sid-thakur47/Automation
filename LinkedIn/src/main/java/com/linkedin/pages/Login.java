@@ -10,11 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.io.File;
-
 public class Login extends LinkedInBase {
-
-    File destFile = new File("Screenshot.png");
 
     //Web element locators
     @FindBy(id = "username")
@@ -31,7 +27,7 @@ public class Login extends LinkedInBase {
 
     @FindBy(id = "error-for-username")
     WebElement wrongUserName;
-    ;
+
 
     //initialization of elements
     public Login() {
@@ -41,6 +37,7 @@ public class Login extends LinkedInBase {
     public void linkedInLogin(String username, String password) throws InterruptedException {
         this.username.sendKeys(username);
         this.password.sendKeys(password);
+        Thread.sleep(1000);
         this.loginButton.click();
         Thread.sleep(1000);
     }

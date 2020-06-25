@@ -7,8 +7,10 @@ package com.linkedin.test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.linkedin.base.LinkedInBase;
+import com.linkedin.pages.Google;
 import com.linkedin.pages.Login;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -22,13 +24,15 @@ public class LoginTest extends LinkedInBase {
     Login login;
     ExtentReports extent;
     ExtentHtmlReporter htmlReporter;
+    Google google;
 
     //initialize login object
 
-    @BeforeMethod
+    @BeforeMethod()
     public void run() {
         initialize();
         login = new Login();
+        google = new Google();
     }
 
     @BeforeSuite
@@ -37,30 +41,28 @@ public class LoginTest extends LinkedInBase {
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
     }
-
     //verify login
     @Test
     public void loginTest() throws IOException, InterruptedException {
-        takeScreenShot("login");
         ExtentTest test = extent.createTest("Login Test", "To check login feature");
-        test.pass("Navigated to Login Page");
+        test.fail("Does not naviagte to Home page");
         login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
-        test.pass("Navigated to HomePage Page");
+        takeScreenShot("login");
+        test.addScreenCaptureFromPath("login.png");
         String currentUrl = webDriver.getCurrentUrl(); //get current url
-        Assert.assertEquals(currentUrl,"https://www.linkedin.com/feed/");
-        takeScreenShot("afterLogin");
+        Assert.assertEquals(currentUrl, "https://www.linkedin.com/feed/");
+        test.log(Status.INFO, "In login page");
     }
 
-    //test for wrong username
     @Test
     public void wrongUserName() throws IOException, InterruptedException {
         ExtentTest test = extent.createTest("Wrong Username", "To check for wrong username");
-        test.pass("Navigated to Login page");
         login.linkedInLogin("sidthaku6433", "test");
-        test.pass("Invalid Username -On Login page ");
         String actualMessage = login.wrongPassword("username");
         Assert.assertEquals(actualMessage, "Please enter a valid username");
         takeScreenShot("invalidUserName");
+        test.addScreenCaptureFromPath("invalidUserName.png");
+        test.log(Status.INFO, "In Login page");
     }
 
     //test for short password
@@ -68,15 +70,16 @@ public class LoginTest extends LinkedInBase {
     public void shortPassword() throws IOException, InterruptedException {
         ExtentTest test = extent.createTest("Wrong Password", "To check for wrong password");
         login.linkedInLogin("sid@gmail.com", "wrong");
-        test.pass("Invalid Password-On Login page ");
         String actualMessage = login.wrongPassword("password");
         Assert.assertEquals(actualMessage, "Welcome Back");
         takeScreenShot("invalidPassword");
+        test.addScreenCaptureFromPath("invalidPassword.png");
+        test.log(Status.INFO, "Invalid Password");
     }
 
     // to close browser
     @AfterMethod
-    public void exitBrowser() throws InterruptedException {
+    public void exitBrowser() {
         webDriver.quit();
         extent.flush();
     }
