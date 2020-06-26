@@ -28,6 +28,11 @@ public class Login extends LinkedInBase {
     @FindBy(id = "error-for-username")
     WebElement wrongUserName;
 
+    @FindBy(xpath = "//li[6]//div[1]//div[1]//button[1]//div[1]")
+    WebElement me;
+
+    @FindBy(xpath = "//a[text()='Sign out']")
+    WebElement signOut;
 
     //initialization of elements
     public Login() {
@@ -35,11 +40,18 @@ public class Login extends LinkedInBase {
     }
 
     public void linkedInLogin(String username, String password) throws InterruptedException {
+        Thread.sleep(500);
         this.username.sendKeys(username);
+        Thread.sleep(500);
         this.password.sendKeys(password);
-        Thread.sleep(1000);
+        Thread.sleep(500);
         this.loginButton.click();
-        Thread.sleep(1000);
+        Thread.sleep(500);
+    }
+
+    public void signOut() {
+        me.click();
+        signOut.click();
     }
 
     public String wrongPassword(String errorOf) {

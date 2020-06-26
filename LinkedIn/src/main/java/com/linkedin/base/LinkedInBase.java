@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -22,8 +23,7 @@ public class LinkedInBase {
 
     public static WebDriver webDriver;
     public static Properties properties;
-    public static TakesScreenshot ts;
-
+    public int count = 0;
     //initialize and load user credentials
     public LinkedInBase() {
         properties = new Properties();
@@ -43,12 +43,17 @@ public class LinkedInBase {
         webDriver = new ChromeDriver(options);
         webDriver.manage().window().maximize();
         webDriver.get(properties.getProperty("url"));
-        ts = (TakesScreenshot) webDriver;
     }
 
     //to take screenshot
-    public void takeScreenShot(String location) throws IOException {
-        File srcFile = ts.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(srcFile, new File("F:/Automations/LinkedIn/src/test/Reports/" + location + ".png"));
+    public void takeScreenShot(String status) {
+        count++;
+        try {
+            File srcFile = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(srcFile, new File("F:/Automations/LinkedIn/src/test/Screenshots/" + this.getClass()
+                    .getName() + status + +count + ".png"));
+        } catch(WebDriverException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -17,7 +17,7 @@ public class HomePage extends LinkedInBase {
     Robot robot = new Robot();
 
     //Web element locators
-    @FindBy(tagName = "input")
+    @FindBy(xpath = "//input[@placeholder='Search']")
     WebElement search;
 
 
