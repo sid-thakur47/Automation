@@ -66,12 +66,13 @@ public class LinkedInBase {
         email.attach(attachment);
         email.send();
     }
+
     //to take screenshot
     public void takeScreenShot(String status) {
         count++;
         try {
             File srcFile = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(srcFile, new File("F:/Automations/LinkedIn/src/test/Screenshots/" + status + count + ".png"));
+            FileUtils.copyFile(srcFile, new File("F:/Automations/LinkedIn/src/test/Reports/" + status + count + ".png"));
         } catch(WebDriverException | IOException e) {
             e.printStackTrace();
         }

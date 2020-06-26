@@ -29,15 +29,18 @@ public class LoginTest extends LinkedInBase implements ITestListener {
     Login login;
     ExtentReports extent;
     ExtentHtmlReporter htmlReporter;
+    ExtentTest test;
+    int count = 1;
 
     //initialize login object
-
     @BeforeMethod()
     public void run() {
+        test = extent.createTest("Login Test", "To check login feature");
         initialize();
         login = new Login();
     }
 
+    //initialize report before every suite
     @BeforeSuite
     public void beforeSuite() {
         htmlReporter = new ExtentHtmlReporter("F:/Automations/LinkedIn/src/test/Reports/extent.html");
@@ -45,25 +48,40 @@ public class LoginTest extends LinkedInBase implements ITestListener {
         extent.attachReporter(htmlReporter);
     }
 
-    /*   //verify login
-       @Test
-       public void loginTest() throws IOException, InterruptedException {
-           login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
-           String currentUrl = webDriver.getCurrentUrl(); //get current url
-           Assert.assertEquals(currentUrl, "https://www.linkedin.com/feed/");
-           login.signOut();
-       }
+    @Test
+    public void loginTest() throws IOException, InterruptedException {
+        login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
+        String currentUrl = webDriver.getCurrentUrl(); //get current url
+        Assert.assertEquals(currentUrl, "https://www.linkedin.com/feed/");
+    }
 
-       @Test
-       public void wrongUserName() throws IOException, InterruptedException {
-           login.linkedInLogin("sidthaku6433", "test");
-           String actualMessage = login.wrongPassword("username");
-           Assert.assertEquals(actualMessage, "Please enter a valid username");
-       }
-   */
+    //verify login
+    @Test
+    public void loginLogoutTest() throws InterruptedException {
+        login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
+        login.signOut();
+        String currentUrl = webDriver.getCurrentUrl(); //get current url
+        Assert.assertEquals(currentUrl, "https://www.linkedin.com/home");
+    }
+
+    @Test
+    public void wrongUserName() throws InterruptedException {
+        login.linkedInLogin("sidthaku6433", "test");
+        String actualMessage = login.wrongPassword("username");
+        Assert.assertEquals(actualMessage, "Please enter a valid username");
+        System.out.println("TestPass" + count + ".png");
+    }
+
     //test for short password
     @Test
-    public void shortPassword() throws IOException, InterruptedException {
+    public void shortPassword() throws InterruptedException {
+        login.linkedInLogin("sid@gmail.com", "wrong");
+        String actualMessage = login.wrongPassword("password");
+        Assert.assertEquals(actualMessage, "Welcome Back");
+    }
+
+    @Test
+    public void failTestCheck() throws InterruptedException {
         login.linkedInLogin("sid@gmail.com", "wrong");
         String actualMessage = login.wrongPassword("password");
         Assert.assertEquals(actualMessage, "Welcome Back");
@@ -71,21 +89,23 @@ public class LoginTest extends LinkedInBase implements ITestListener {
 
     // to close browser and generate test report
     @AfterMethod
-    public void exitBrowser(ITestResult result) throws InterruptedException {
-        ExtentTest test = extent.createTest("Login Test", "To check login feature");
+    public void exitBrowser(ITestResult result) throws InterruptedException, IOException {
         if(result.getStatus() == FAILURE) {
+            test.addScreenCaptureFromPath("TestFail" + count + ".png");
             test.fail(MarkupHelper.createLabel(result.getName() + "Test Failed", ExtentColor.RED));
         } else if(result.getStatus() == ITestResult.SUCCESS) {
+            test.addScreenCaptureFromPath("TestPass" + count + ".png");
             test.pass(MarkupHelper.createLabel(result.getName() + "Test Pass", ExtentColor.GREEN));
         }
         webDriver.quit();
         extent.flush();
         Thread.sleep(1000);
+        count++;
     }
 
     //send mail
     @AfterSuite
     public void sendmail() throws EmailException {
-        sendEmail();
+        // sendEmail();
     }
 }
