@@ -1,3 +1,9 @@
+/**********************************************************
+ * @Purpose: To take Screenshots of test result
+ * @Author: Siddhesh Thakur
+ * @Date: 26/06/2020
+ **********************************************************/
+
 package com.linkedin.CustomListener;
 
 import com.linkedin.base.LinkedInBase;
@@ -9,19 +15,19 @@ public class CustomListener extends LinkedInBase implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        takeScreenShot("pass");
+        takeScreenShot("TestPass");
     }
     @Override
     public void onTestFailure(ITestResult result) {
-        takeScreenShot("fail");
+        takeScreenShot("TestFail");
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        takeScreenShot("finish");
+        takeScreenShot("TestFinish");
     }
     @Override
     public void onTestSkipped(ITestResult result) {
-        takeScreenShot("skipped");
+        takeScreenShot("TestSkipped");
     }
 }

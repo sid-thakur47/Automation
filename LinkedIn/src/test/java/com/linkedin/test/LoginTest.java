@@ -13,6 +13,7 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.linkedin.CustomListener.CustomListener;
 import com.linkedin.base.LinkedInBase;
 import com.linkedin.pages.Login;
+import org.apache.commons.mail.EmailException;
 import org.testng.Assert;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -44,22 +45,22 @@ public class LoginTest extends LinkedInBase implements ITestListener {
         extent.attachReporter(htmlReporter);
     }
 
-    //verify login
-    @Test
-    public void loginTest() throws IOException, InterruptedException {
-        login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
-        String currentUrl = webDriver.getCurrentUrl(); //get current url
-        Assert.assertEquals(currentUrl, "https://www.linkedin.com/feed/");
-        login.signOut();
-    }
+    /*   //verify login
+       @Test
+       public void loginTest() throws IOException, InterruptedException {
+           login.linkedInLogin(properties.getProperty("username"), properties.getProperty("password")); //get username and password
+           String currentUrl = webDriver.getCurrentUrl(); //get current url
+           Assert.assertEquals(currentUrl, "https://www.linkedin.com/feed/");
+           login.signOut();
+       }
 
-    @Test
-    public void wrongUserName() throws IOException, InterruptedException {
-        login.linkedInLogin("sidthaku6433", "test");
-        String actualMessage = login.wrongPassword("username");
-        Assert.assertEquals(actualMessage, "Please enter a valid username");
-    }
-
+       @Test
+       public void wrongUserName() throws IOException, InterruptedException {
+           login.linkedInLogin("sidthaku6433", "test");
+           String actualMessage = login.wrongPassword("username");
+           Assert.assertEquals(actualMessage, "Please enter a valid username");
+       }
+   */
     //test for short password
     @Test
     public void shortPassword() throws IOException, InterruptedException {
@@ -68,7 +69,7 @@ public class LoginTest extends LinkedInBase implements ITestListener {
         Assert.assertEquals(actualMessage, "Welcome Back");
     }
 
-    // to close browser
+    // to close browser and generate test report
     @AfterMethod
     public void exitBrowser(ITestResult result) throws InterruptedException {
         ExtentTest test = extent.createTest("Login Test", "To check login feature");
@@ -76,11 +77,15 @@ public class LoginTest extends LinkedInBase implements ITestListener {
             test.fail(MarkupHelper.createLabel(result.getName() + "Test Failed", ExtentColor.RED));
         } else if(result.getStatus() == ITestResult.SUCCESS) {
             test.pass(MarkupHelper.createLabel(result.getName() + "Test Pass", ExtentColor.GREEN));
-        } else if(result.getStatus() == ITestResult.SKIP) {
-            test.pass(MarkupHelper.createLabel(result.getName() + "Test Pass", ExtentColor.YELLOW));
         }
         webDriver.quit();
         extent.flush();
         Thread.sleep(1000);
+    }
+
+    //send mail
+    @AfterSuite
+    public void sendmail() throws EmailException {
+        sendEmail();
     }
 }
