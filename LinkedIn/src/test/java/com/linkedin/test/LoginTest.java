@@ -10,12 +10,12 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.linkedin.CustomListener.CustomListener;
 import com.linkedin.base.LinkedInBase;
 import com.linkedin.pages.Login;
 import org.apache.commons.mail.EmailException;
 import org.testng.Assert;
-import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -24,7 +24,7 @@ import java.io.IOException;
 import static org.testng.ITestResult.FAILURE;
 
 @Listeners(CustomListener.class)
-public class LoginTest extends LinkedInBase implements ITestListener {
+public class LoginTest extends LinkedInBase {
 
     Login login;
     ExtentReports extent;
@@ -46,6 +46,9 @@ public class LoginTest extends LinkedInBase implements ITestListener {
         htmlReporter = new ExtentHtmlReporter("F:/Automations/LinkedIn/src/test/Reports/extent.html");
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
+        htmlReporter.config().setDocumentTitle("LinkedIn Login Test Reports");
+        htmlReporter.config().setReportName("LinkedIn");
+        htmlReporter.config().setTheme(Theme.DARK);
     }
 
     @Test
@@ -80,11 +83,12 @@ public class LoginTest extends LinkedInBase implements ITestListener {
         Assert.assertEquals(actualMessage, "Welcome Back");
     }
 
+    //failing test to check it is reported or not
     @Test
     public void failTestCheck() throws InterruptedException {
         login.linkedInLogin("sid@gmail.com", "wrong");
         String actualMessage = login.wrongPassword("password");
-        Assert.assertEquals(actualMessage, "Welcome Back");
+        Assert.assertEquals(actualMessage, "Welcome");
     }
 
     // to close browser and generate test report
@@ -106,6 +110,6 @@ public class LoginTest extends LinkedInBase implements ITestListener {
     //send mail
     @AfterSuite
     public void sendmail() throws EmailException {
-        // sendEmail();
+        sendEmail("sidthakur258@gmail.com");
     }
 }

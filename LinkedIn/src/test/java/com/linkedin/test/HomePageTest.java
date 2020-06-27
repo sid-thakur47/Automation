@@ -27,6 +27,13 @@ public class HomePageTest extends LinkedInBase {
     public void searchJob() throws InterruptedException, IOException {
         homePage.search("QA Automation");
         Thread.sleep(1000);
+        loginTest.signOut();
+    }
+
+    @Test
+    public void addPost() throws InterruptedException {
+        homePage.addPost();
+        loginTest.signOut();
     }
 
     @AfterMethod

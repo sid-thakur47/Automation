@@ -50,7 +50,7 @@ public class LinkedInBase {
     }
 
     //send mail of test report
-    public static void sendEmail() throws EmailException {
+    public static void sendEmail(String sendTo) throws EmailException {
         EmailAttachment attachment = new EmailAttachment();
         attachment.setPath("F:/Automations/LinkedIn/src/test/Reports/extent.html");
         attachment.setDisposition(EmailAttachment.ATTACHMENT);
@@ -60,7 +60,7 @@ public class LinkedInBase {
         email.setSmtpPort(584);
         email.setAuthentication(properties.getProperty("email"), properties.getProperty("emailPassword"));
         email.setSSLOnConnect(true);
-        email.addTo("sidthakur6433@gmail.com", "Siddhesh");
+        email.addTo(sendTo);
         email.setFrom(properties.getProperty("email"), "Siddhesh");
         email.setMsg("Please check the report for current feature");
         email.attach(attachment);
